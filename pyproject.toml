@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "croppages"
+version = "0.1.0"
+description = ""
+authors = ["fehlfarbe <marcus@degenkolbe.eu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-python = "^4.7.0.68"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
