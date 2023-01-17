@@ -9,7 +9,6 @@ def main(srcPath: str, dstPath: str):
     p2 = None
     frame = None
     frameTmp = None
-    fileCount = 0
 
     def drawRectangle(event, x, y, flags, param):
         nonlocal p1, p2, frame, frameTmp
@@ -34,6 +33,8 @@ def main(srcPath: str, dstPath: str):
     cv2.setMouseCallback("frame", drawRectangle)
 
     for file in sorted(os.listdir(srcPath)):
+        fileCount = 0
+        p1 = p2 = None
         filePath = os.path.join(srcPath, file)
         if os.path.isfile(filePath):
             print(f"Opening {file}")
@@ -50,24 +51,27 @@ def main(srcPath: str, dstPath: str):
                     print(k)
 
                 match k:
-                    case 27:
+                    case 27:  # ESC
                         print("Pressed ESC...abort")
                         return
-                    case 32:
+                    case 32:  # SPACE
                         print("Pressed SPACE...next image")
                         break
-                    case 115: # s
-                        dstFilePath = os.path.join(dstPath, f'{file}_{fileCount:05d}.jpg')
-                        print(f"Save crop to {dstFilePath}")
-                        minX = min(p1[0], p2[0])
-                        maxX = max(p1[0], p2[0])
-                        minY = min(p1[1], p2[1])
-                        maxY = max(p1[1], p2[1])
-                        cv2.imwrite(dstFilePath, frame[minY:maxY,
-                                                       minX:maxX])
-                        p1 = p2 = None
-                        frameTmp = frame.copy()
-                        fileCount += 1
+                    case 115:  # s
+                        if p1 and p2:
+                            while os.path.exists(dstFilePath := os.path.join(dstPath, f'{file}_{fileCount:05d}.jpg')):
+                                print(f"{dstFilePath} exists...try other file name")
+                                fileCount += 1
+                            print(f"Save crop to {dstFilePath}")
+                            minX = min(p1[0], p2[0])
+                            maxX = max(p1[0], p2[0])
+                            minY = min(p1[1], p2[1])
+                            maxY = max(p1[1], p2[1])
+                            cv2.imwrite(dstFilePath, frame[minY:maxY,
+                                                           minX:maxX])
+                            p1 = p2 = None
+                            frameTmp = frame.copy()
+                            fileCount += 1
 
 
 if __name__ == '__main__':
