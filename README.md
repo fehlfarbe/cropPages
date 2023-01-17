@@ -1,10 +1,10 @@
 # cropPages
 Tool to crop rectangles from images
 
-# Install
+## Install
 clone and install dependencies via `poetry install`
 
-# Usage
+## Usage
 run `python3 main.py sourceDir destinationDir`
 
 ESC - quit
